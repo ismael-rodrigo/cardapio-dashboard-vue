@@ -1,4 +1,5 @@
 import { route } from 'quasar/wrappers';
+import { useAuthStore } from 'src/stores/auth';
 import {
   createMemoryHistory,
   createRouter,
@@ -31,6 +32,25 @@ export default route(function (/* { store, ssrContext } */) {
     // quasar.conf.js -> build -> publicPath
     history: createHistory(process.env.VUE_ROUTER_BASE),
   });
+
+  const auth = useAuthStore()
+
+  Router.beforeEach((to,from,next)=>{
+
+    if(to.path=='/')next({path:'dashboard'})
+
+
+    if(to.meta.requiresAuth && !auth.isAuthenticated){
+      next({
+        path:'/login',
+        replace:true
+      })
+    }
+    else{
+      next()
+    }
+  })
+
 
   return Router;
 });

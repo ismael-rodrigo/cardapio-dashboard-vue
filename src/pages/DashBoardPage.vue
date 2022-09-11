@@ -56,7 +56,8 @@ onMounted(()=>{
 
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+
   .container{
     display:flex;
     justify-content: space-evenly;
@@ -71,7 +72,7 @@ onMounted(()=>{
   }
   .order-container h1{
     font-weight: 350;
-    font-size: 30px;
+    font-size: 2.3rem;
     text-align: center;
     margin: 0px;
     padding: 0px;

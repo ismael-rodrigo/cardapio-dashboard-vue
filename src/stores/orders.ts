@@ -2,6 +2,8 @@ import { defineStore } from 'pinia';
 import {api} from 'src/boot/api';
 import { token } from 'app/token';
 import { ShopCarType } from 'src/models/shopOrder';
+import { Notify } from 'quasar';
+import { useAuthStore } from './auth';
 
 
 
@@ -23,6 +25,9 @@ const organizeOrders = (orders:ShopCarType[])=>{
 }
 
 
+const auth = useAuthStore()
+
+
 
 export const useOrderStore = defineStore('order', {
   state: () => ({
@@ -40,25 +45,25 @@ export const useOrderStore = defineStore('order', {
 
   actions: {
     getShopOrders() {
+      console.log(auth.accessToken)
       return api.get('api/shopcar',{headers: {
-        'Authorization': `Bearer ${token}` 
+        'Authorization': `Bearer ${auth.accessToken}` 
       }
     }).then(({data}:{data:ShopCarType[]})=>{
       this.shopOrders = organizeOrders(data)
       return this.shopOrders
     })
-
-
-
     },
 
     setStatusOrder(nowStatus:'created'|'progress'|'conclude' , next=true ,id:string){
       const statusAvailable = ['created','progress','conclude','finalized']
-      api.put(`/api/shopcar/${id}`,{status:next?statusAvailable[statusAvailable.indexOf(nowStatus)+1]:statusAvailable[statusAvailable.indexOf(nowStatus)-1]},
+      const newStatus = next?statusAvailable[statusAvailable.indexOf(nowStatus)+1]:statusAvailable[statusAvailable.indexOf(nowStatus)-1]
+      api.put(`/api/shopcar/${id}`,{status:newStatus},
       {
         headers: {
-        'Authorization': `Bearer ${token}` 
+        'Authorization': `Bearer ${auth.accessToken}` 
       }}).then((response)=>{
+        Notify.create({message:'Pedido atualizado!' ,timeout:300 ,color:'positive' ,icon:'done'})
         this.shopOrders = organizeOrders(response.data)
       })
     }
