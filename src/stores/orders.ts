@@ -45,7 +45,6 @@ export const useOrderStore = defineStore('order', {
 
   actions: {
     getShopOrders() {
-      console.log(auth.accessToken)
       return api.get('api/shopcar',{headers: {
         'Authorization': `Bearer ${auth.accessToken}` 
       }

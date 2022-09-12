@@ -29,7 +29,7 @@
         <br>
         <div class="buttons-container"> 
             <q-btn v-show="!hasStatus('created')"  color="red"  icon="arrow_back_ios_new"   label="Voltar"  @click="updateStatus(props.order.status ,false)"  />
-            <q-btn icon-right="info" label="Detalhe"  />
+            <q-btn icon-right="info" label="Detalhe" @click="$emit('openModal',props.order)" />
             <q-btn color="green"  icon-right="arrow_forward_ios" :label="props.order.status !='conclude'?'Avançar':'Finalizar' "  @click="updateStatus(props.order.status)" />
         </div>
     </div>

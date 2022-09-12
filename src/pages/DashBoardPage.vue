@@ -7,7 +7,7 @@
         Pedido realizado
       </h1>
       <q-separator inset/>
-      <card-order v-for="iten in order.shopOrders.created" :key="iten.id"  :order="iten" />
+      <card-order v-for="iten in order.shopOrders.created" :key="iten.id"  :order="iten" @open-modal="setModalToOpen" />
     </div>
     <q-separator vertical inset />
 
@@ -17,7 +17,7 @@
         Em andamento
       </h1>
       <q-separator inset/>
-      <card-order v-for="iten in order.shopOrders.progress" :key="iten.id"  :order="iten" />
+      <card-order v-for="iten in order.shopOrders.progress" :key="iten.id"  :order="iten" @open-modal="setModalToOpen"  />
     </div>
     <q-separator vertical inset />
 
@@ -26,10 +26,9 @@
         Saiu para entrega
       </h1>
       <q-separator inset/>
-      <card-order v-for="iten in order.shopOrders.conclude" :key="iten.id"  :order="iten" />
+      <card-order v-for="iten in order.shopOrders.conclude" :key="iten.id"  :order="iten" @open-modal="setModalToOpen"   />
     </div>
-    <q-btn @click="handlerStateModal">ssss</q-btn>
-    <modal-detail-order :isOpenModal="openModal" />
+    <modal-detail-order :infoShopCar="infoModal" v-model="openModal" />
   
 
 </div>
@@ -45,6 +44,7 @@ import CardOrder from "../components/dashboard/cardOrder.vue";
 import { onMounted, ref} from "vue";
 import { useOrderStore } from "src/stores/orders";
 import ModalDetailOrder from "src/components/dashboard/ModalDetailOrder.vue";
+import { ShopCarType } from "src/models/shopOrder";
 
 const order = useOrderStore()
 
@@ -52,12 +52,14 @@ onMounted(()=>{
   order.getShopOrders().catch(()=>alert('error'))
 })
 
+let openModal = ref(false)
+let infoModal = ref({} as ShopCarType )
 
-let openModal = ref(true)
 
 
-function handlerStateModal(){
-  openModal.value = !openModal.value
+function setModalToOpen(newInfoModal:ShopCarType){
+  openModal.value = true
+  infoModal.value = newInfoModal
 }
 
 
