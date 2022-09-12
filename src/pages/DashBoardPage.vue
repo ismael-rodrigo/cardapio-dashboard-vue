@@ -28,12 +28,10 @@
       <q-separator inset/>
       <card-order v-for="iten in order.shopOrders.conclude" :key="iten.id"  :order="iten" />
     </div>
-
-
+    <q-btn @click="handlerStateModal">ssss</q-btn>
+    <modal-detail-order :isOpenModal="openModal" />
   
 
-
-    
 </div>
 
   
@@ -46,12 +44,23 @@
 import CardOrder from "../components/dashboard/cardOrder.vue";
 import { onMounted, ref} from "vue";
 import { useOrderStore } from "src/stores/orders";
+import ModalDetailOrder from "src/components/dashboard/ModalDetailOrder.vue";
 
 const order = useOrderStore()
 
 onMounted(()=>{
   order.getShopOrders().catch(()=>alert('error'))
 })
+
+
+let openModal = ref(true)
+
+
+function handlerStateModal(){
+  openModal.value = !openModal.value
+}
+
+
 
 
 </script>
