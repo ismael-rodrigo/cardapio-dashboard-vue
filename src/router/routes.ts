@@ -6,7 +6,10 @@ const routes: RouteRecordRaw[] = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       
-      { path: 'dashboard', component: () => import('pages/DashBoardPage.vue') ,meta:{ requiresAuth:true }}],
+      { path: 'dashboard', component: () => import('pages/DashBoardPage.vue') ,meta:{ requiresAuth:true }},
+      { path: 'dashboard2', component: () => import('pages/DashBoardPage.vue') ,meta:{ requiresAuth:false }},
+    ],
+    meta:{requiresAuth:true}
   },
 
 

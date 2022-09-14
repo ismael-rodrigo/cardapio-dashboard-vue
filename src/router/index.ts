@@ -34,11 +34,10 @@ export default route(function (/* { store, ssrContext } */) {
   });
 
   const auth = useAuthStore()
-
+  
   Router.beforeEach((to,from,next)=>{
-
-    if(to.path=='/')next({path:'dashboard'})
-
+    if(to.path=='/' && auth.isAuthenticated)next({path:'dashboard'})
+    if(to.path=='/login' && auth.isAuthenticated)next({path:'dashboard'})
 
     if(to.meta.requiresAuth && !auth.isAuthenticated){
       next({

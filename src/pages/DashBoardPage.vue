@@ -29,7 +29,7 @@
       <card-order v-for="iten in order.shopOrders.conclude" :key="iten.id"  :order="iten" @open-modal="setModalToOpen"   />
     </div>
     <modal-detail-order :infoShopCar="infoModal" v-model="openModal" />
-  
+    <q-btn @click="open2">open dash 2</q-btn>
 
 </div>
 
@@ -41,12 +41,16 @@
 
 <script lang="ts" setup>
 import CardOrder from "../components/dashboard/cardOrder.vue";
-import { onMounted, ref} from "vue";
+import { onMounted, ref } from "vue";
 import { useOrderStore } from "src/stores/orders";
 import ModalDetailOrder from "src/components/dashboard/ModalDetailOrder.vue";
 import { ShopCarType } from "src/models/shopOrder";
+import { useRouter } from 'vue-router';
+import { useAuthStore } from "src/stores/auth";
 
 const order = useOrderStore()
+const route = useRouter()
+const auth = useAuthStore()
 
 onMounted(()=>{
   order.getShopOrders().catch(()=>alert('error'))
@@ -56,6 +60,11 @@ let openModal = ref(false)
 let infoModal = ref({} as ShopCarType )
 
 
+
+
+function open2(){
+  auth.logout()
+}
 
 function setModalToOpen(newInfoModal:ShopCarType){
   openModal.value = true

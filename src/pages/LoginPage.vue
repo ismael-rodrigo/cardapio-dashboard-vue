@@ -2,8 +2,8 @@
     <div id="container">
         <form class="form" @submit.prevent="handleSubmit">
             <p>Login</p>
-            <q-input   v-model="username"    class="q-mt-sm"  label="E-mail" />
-            <q-input type="password" v-model="password" class="q-mt-sm"  label="Password" />
+            <q-input filled  v-model="username"  label="E-mail" />
+            <q-input filled  type="password" v-model="password"  label="Password" />
             <q-btn   type="submit" class="q-mt-lg full-width "  >Sing in</q-btn>
             <br>
 
@@ -15,14 +15,18 @@
 
 
 <script setup>
-import { Notify } from 'quasar';
-import { ref } from 'vue';
+import { Notify} from 'quasar';
+import { ref  } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAuthStore} from '../stores/auth'
 
 const auth = useAuthStore()
 const router = useRouter()
 
+
+
+
+ 
 
 let username = ref('')
 let password = ref('')
@@ -42,18 +46,19 @@ function handleSubmit(){
 
 
 
-<style scoped>
+<style scoped lang="scss">
 #container {
     display: flex ;
     justify-content: center;
     align-items: center;
     height: 100vh;
+    background-color: $dark;
 }
 .form{
     padding: 30px;
     border-radius: 5px;
-    border: thin solid rgb(219, 219, 219);
-    background-color: azure;
+    border: thin solid rgb(117, 117, 117);
+    background-color: rgb(255, 255, 255);
     width: 40%;
     min-width: fit-content;
     max-width: 400px;
@@ -71,19 +76,10 @@ function handleSubmit(){
     font-size: 10px;
     color: rgb(46, 136, 136);
 }
-.form a:hover{
-    color: rgb(65, 167, 167);
-}
-.form img{
-    width: 50px;
-}
-.google-login{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.google-login img{
-    width: 50px;
-    margin-right: 10px;
-}
+
+
+
+
+
+
 </style>
