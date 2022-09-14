@@ -64,6 +64,7 @@ let infoModal = ref({} as ShopCarType )
 
 function open2(){
   auth.logout()
+  route.push('/login')
 }
 
 function setModalToOpen(newInfoModal:ShopCarType){

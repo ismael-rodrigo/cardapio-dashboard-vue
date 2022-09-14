@@ -15,14 +15,8 @@
           Dashboard
         </q-toolbar-title>
 
-        <q-toggle
-        left-label
-        label="light mode"
-        color="yellow"
-        dark
-        v-model="darkMode"
-        @click="$q.dark.set(!darkMode.valueOf())"
-    />
+
+    <account-settings/>
 
       </q-toolbar>
     </q-header>
@@ -56,6 +50,7 @@
 <script lang="ts" setup>
 import { defineComponent, ref } from 'vue';
 import EssentialLink from 'components/EssentialLink.vue';
+import AccountSettings from 'components/AccountSettings.vue'
 import { useQuasar } from 'quasar'
 
 const $q = useQuasar()
@@ -67,14 +62,14 @@ let darkMode = ref(true)
 
 const linksList = [
   {
-    title: 'Produtos',
+    title: 'Dashboard',
     icon: 'school',
-    link: 'https://quasar.dev'
+    link: 'dashboard'
   },
   {
     title: 'Painel de Pedidos',
     icon: 'record_voice_over',
-    link: 'https://forum.quasar.dev'
+    link: 'product'
   },
 ];
 

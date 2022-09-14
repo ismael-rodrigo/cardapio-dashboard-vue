@@ -26,6 +26,7 @@ export const useAuthStore = defineStore('auth', {
 
         LocalStorage.set('cardapio@dashboard:access',response.data.access)
         LocalStorage.set('cardapio@dashboard:refresh',response.data.refresh)
+        LocalStorage.set('cardapio@dashboard:username',credentials.username)
 
         return this.currentUser
       })
@@ -40,6 +41,7 @@ export const useAuthStore = defineStore('auth', {
           
           if(response.status==200){
             this.accessToken = `${LocalStorage.getItem('cardapio@dashboard:access')}`
+            this.currentUser = `${LocalStorage.getItem('cardapio@dashboard:username')}`
             this.isAuthenticated = true 
             return true
           
@@ -58,13 +60,15 @@ export const useAuthStore = defineStore('auth', {
       
     },
 
+    async refreshToken(){
+      console.log('refresh')
+    },
+
     logout(){
       LocalStorage.remove('cardapio@dashboard:access')
       LocalStorage.remove('cardapio@dashboard:refresh')
       this.isAuthenticated = false 
-      // eslint-disable-next-line
-      //@ts-ignore
-      this.router.push({path:'login'})
+
       
     }
   }

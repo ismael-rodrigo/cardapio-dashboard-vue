@@ -6,15 +6,9 @@ import { api } from './api'
 
 
 
-export default boot(async ({ app ,redirect ,urlPath ,store ,router}) => {
+export default boot(async ({ app ,store}) => {
     const auth = useAuthStore(store)
-    const isAuth = await auth.getIsAuthenticated()
-    
-    if(!isAuth && !urlPath.startsWith('/login'))redirect('/login')
-    
-    
-        
-    
+    await auth.getIsAuthenticated()    
 })
 
 
