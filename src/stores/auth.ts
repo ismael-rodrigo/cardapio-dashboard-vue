@@ -3,15 +3,25 @@ import { api } from 'src/boot/api';
 import { LocalStorage } from 'quasar'
 
 
+export type tokenType={
+  access:string 
+  refresh:string
+}
+
+export type authTypes = {
+  token:tokenType | null
+  currentUser:string | null
+  isAuthenticated:boolean
+}
+
 
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    accessToken: '',
-    refreshToken: '',
-    currentUser :'' ,
+    token:null,
+    currentUser :null ,
     isAuthenticated :false
-  }),
+  } as authTypes ),
   
 
 
@@ -20,13 +30,12 @@ export const useAuthStore = defineStore('auth', {
     loginUser(credentials:{username:string,password:string}) {
       return api.post('/auth/token' ,credentials).then((response)=>{
         this.currentUser = credentials.username
-        this.accessToken = response.data.access
-        this.refreshToken = response.data.refresh
+        this.token = response.data
         this.isAuthenticated = true
 
-        LocalStorage.set('cardapio@dashboard:access',response.data.access)
-        LocalStorage.set('cardapio@dashboard:refresh',response.data.refresh)
+        LocalStorage.set('cardapio@dashboard:token',response.data)
         LocalStorage.set('cardapio@dashboard:username',credentials.username)
+
 
         return this.currentUser
       })
@@ -36,11 +45,11 @@ export const useAuthStore = defineStore('auth', {
       try{
         const response = await api.get('/auth/verify' ,{
           headers: {
-            'Authorization': `Bearer ${this.accessToken?this.accessToken:LocalStorage.getItem('cardapio@dashboard:access')}` 
+            'Authorization': `Bearer ${this?.token?.access ?this.token.access:LocalStorage.getItem<tokenType>('cardapio@dashboard:token')?.access}` 
           }})
           
           if(response.status==200){
-            this.accessToken = `${LocalStorage.getItem('cardapio@dashboard:access')}`
+            this.token = LocalStorage.getItem<tokenType>('cardapio@dashboard:token')
             this.currentUser = `${LocalStorage.getItem('cardapio@dashboard:username')}`
             this.isAuthenticated = true 
             return true
@@ -65,9 +74,10 @@ export const useAuthStore = defineStore('auth', {
     },
 
     logout(){
-      LocalStorage.remove('cardapio@dashboard:access')
-      LocalStorage.remove('cardapio@dashboard:refresh')
+      LocalStorage.remove('cardapio@dashboard:token')
+      LocalStorage.remove('cardapio@dashboard:username')
       this.isAuthenticated = false 
+  
 
       
     }

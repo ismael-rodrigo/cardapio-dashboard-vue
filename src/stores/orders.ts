@@ -46,7 +46,7 @@ export const useOrderStore = defineStore('order', {
   actions: {
     getShopOrders() {
       return api.get('api/shopcar',{headers: {
-        'Authorization': `Bearer ${auth.accessToken}` 
+        'Authorization': `Bearer ${auth?.token?.access}` 
       }
     }).then(({data}:{data:ShopCarType[]})=>{
       this.shopOrders = organizeOrders(data)
@@ -60,7 +60,7 @@ export const useOrderStore = defineStore('order', {
       api.put(`/api/shopcar/${id}`,{status:newStatus},
       {
         headers: {
-        'Authorization': `Bearer ${auth.accessToken}` 
+        'Authorization': `Bearer ${auth?.token?.access}` 
       }}).then((response)=>{
         Notify.create({message:'Pedido atualizado!' ,timeout:300 ,color:'positive' ,icon:'done'})
         this.shopOrders = organizeOrders(response.data)

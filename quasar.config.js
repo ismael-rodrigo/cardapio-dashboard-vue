@@ -32,8 +32,7 @@ module.exports = configure(function (/* ctx */) {
     boot: [
       'api',
       'isAuthenticated',
-      'loadUserSettings'
-      
+
     ],
 
     // https://v2.quasar.dev/quasar-cli-vite/quasar-config-js#css

@@ -29,7 +29,7 @@
       <card-order v-for="iten in order.shopOrders.conclude" :key="iten.id"  :order="iten" @open-modal="setModalToOpen"   />
     </div>
     <modal-detail-order :infoShopCar="infoModal" v-model="openModal" />
-    <q-btn @click="open2">open dash 2</q-btn>
+   
 
 </div>
 
@@ -59,13 +59,6 @@ onMounted(()=>{
 let openModal = ref(false)
 let infoModal = ref({} as ShopCarType )
 
-
-
-
-function open2(){
-  auth.logout()
-  route.push('/login')
-}
 
 function setModalToOpen(newInfoModal:ShopCarType){
   openModal.value = true

@@ -1,12 +1,15 @@
 <template>
   <div class="q-pa-md">
     <q-btn-dropdown 
-      label="Configurações">
+      label="Configurações" 
+      icon="account_circle"
+      rounded
+      >
 
       <div class="row no-wrap q-pa-md">
         <div class="column">
           <div class="text-h6 q-mb-md">Settings</div>
-          <q-toggle v-model="darkMode" @click="$q.dark.set(!darkMode.valueOf())" label="Light mode" />
+          <q-toggle v-model="darkMode" @click="settings.setDarkMode(darkMode)" label="Dark mode" />
           
         </div>
 
@@ -38,18 +41,20 @@ import { ref } from 'vue'
 import {useQuasar} from 'quasar'
 import { useAuthStore } from 'src/stores/auth'
 import { useRouter } from 'vue-router'
+import { useSettings } from 'src/stores/userSettings';
 
-const $q = useQuasar()
+
 const auth = useAuthStore()
 const route = useRouter()
+const settings = useSettings()
 
-
-let darkMode = ref(!$q.dark.isActive)
+let darkMode = ref(settings.darkMode)
 
 
 function handleLogout(){
   auth.logout()
-  route.push('/login')
+  route.push('login')
+
 }
 
 </script>
