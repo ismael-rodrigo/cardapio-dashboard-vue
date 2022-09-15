@@ -1,9 +1,9 @@
 <template>
   <div class="q-pa-md">
     <q-btn-dropdown 
-      label="Configurações" 
       icon="account_circle"
       rounded
+      
       >
 
       <div class="row no-wrap q-pa-md">
