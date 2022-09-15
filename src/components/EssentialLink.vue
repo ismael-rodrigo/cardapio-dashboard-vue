@@ -3,36 +3,31 @@
     clickable
     tag="a"
     target="_blank"
-    :href="link"
+    @click="route.push(link)"
   >
     <q-item-section
       v-if="icon"
       avatar
     >
-      <q-icon :name="icon" />
+      <q-icon :name="props.icon" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ title }}</q-item-label>
+      <q-item-label>{{ props.title }}</q-item-label>
 
     </q-item-section>
   </q-item>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue';
+<script lang="ts" setup>
+import {defineProps} from 'vue';
+import { useRouter } from 'vue-router';
 
-export default defineComponent({
-  name: 'EssentialLink',
-  props: {
+const props = defineProps(
+{
     title: {
       type: String,
       required: true
-    },
-
-    caption: {
-      type: String,
-      default: ''
     },
 
     link: {
@@ -44,6 +39,10 @@ export default defineComponent({
       type: String,
       default: ''
     }
-  }
-});
+  })
+
+const route = useRouter()
+
+
+
 </script>

@@ -64,12 +64,12 @@ const linksList = [
   {
     title: 'Dashboard',
     icon: 'school',
-    link: 'dashboard'
+    link: '/dashboard'
   },
   {
     title: 'Painel de Pedidos',
     icon: 'record_voice_over',
-    link: 'product'
+    link: '/product'
   },
 ];
 

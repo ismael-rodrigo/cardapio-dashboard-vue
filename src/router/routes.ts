@@ -5,9 +5,15 @@ const routes: RouteRecordRaw[] = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
+
+      { path: 'dashboard', component: () => import('pages/DashBoard/IndexPage.vue')},
+        
+
+      { path: 'product', component: () => import('pages/Product/IndexPage.vue') },
+      { path: 'product/new', component: () => import('pages/Product/NewProductPage.vue')},
       
-      { path: 'dashboard', component: () => import('pages/DashBoardPage.vue') ,meta:{ requiresAuth:true }},
-      { path: 'dashboard2', component: () => import('pages/DashBoardPage.vue') ,meta:{ requiresAuth:false }},
+
+
     ],
     meta:{requiresAuth:true}
   },

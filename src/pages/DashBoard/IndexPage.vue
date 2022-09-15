@@ -40,17 +40,14 @@
 </template>
 
 <script lang="ts" setup>
-import CardOrder from "../components/dashboard/cardOrder.vue";
+
+import CardOrder from "../../components/dashboard/cardOrder.vue";
 import { onMounted, ref } from "vue";
 import { useOrderStore } from "src/stores/orders";
 import ModalDetailOrder from "src/components/dashboard/ModalDetailOrder.vue";
 import { ShopCarType } from "src/models/shopOrder";
-import { useRouter } from 'vue-router';
-import { useAuthStore } from "src/stores/auth";
 
 const order = useOrderStore()
-const route = useRouter()
-const auth = useAuthStore()
 
 onMounted(()=>{
   order.getShopOrders().catch(()=>alert('error'))
