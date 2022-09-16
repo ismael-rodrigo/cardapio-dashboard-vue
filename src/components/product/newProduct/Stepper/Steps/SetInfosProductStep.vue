@@ -1,18 +1,18 @@
 <template>
     <div class="container">
-        <h1 class="title">Novo Produto</h1>
-
-    <q-card class="my-card" flat bordered>
-      <q-card-section horizontal>
+    <input id="fileInput" type="file" style="display:none" @change="fileChange" />
+    <q-card class="my-card" >
+      
+      <q-card-section >
         <q-img
           class="col"
-          src="https://www.namepros.com/attachments/empty-png.89209/"
+          :src="imgProduct"
         />
 
-        <q-card-actions vertical class="justify-around q-px-md">
-          <q-btn flat round color="green" icon="add" />
-          <q-btn flat round color="red" icon="delete" />
-         
+        <q-card-actions   >
+          <q-btn flat round color="green" icon="add" type="file" id="fileInputButton" onclick="document.getElementById('fileInput').click()" />
+          <q-btn flat round color="red" icon="delete" @click="removeImage" />
+      
         </q-card-actions>
       </q-card-section>
       </q-card>
@@ -20,12 +20,11 @@
       <q-form
       @submit="onSubmit"
       @reset="onReset"
-      class="full-width gap-1 form"
+      class="full-width form"
     >
       <q-input class="full-width"  filled v-model="product_title" label="Nome do Produto"  />
       <q-input class="full-width" type="textarea"  filled v-model="product_description" label="Descrição do Produto"   />
 
-      <q-btn label="Submit" type="submit" color="primary"/>
     </q-form>
 
     </div>
@@ -37,6 +36,7 @@ import { ref } from 'vue';
 let product_title = ref('')
 let product_description = ref('')
 
+let imgProduct = ref('https://www.namepros.com/attachments/empty-png.89209/')
 
 
 const onSubmit = (evt:SubmitEvent | Event)=>{
@@ -45,6 +45,17 @@ console.log(evt)
 const onReset = () =>{
 console.log('reset')
 }
+
+const fileChange = (e:any)=>{
+  console.log(e.target.files)
+if(e.target.files){
+  imgProduct.value = 'https://static.clubedaanamariabraga.com.br/wp-content/uploads/2016/07/pizza-de-4-queijos.jpg?x41527'
+}
+}
+const removeImage = ()=>{
+  imgProduct.value = 'https://www.namepros.com/attachments/empty-png.89209/'
+}
+
 
 
 </script>

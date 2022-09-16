@@ -1,5 +1,5 @@
 <template>
-    <StepperNewProduct :steps="step"/>
+    <StepperNewProduct :steps="steps"/>
 </template>
 
 
@@ -12,7 +12,7 @@ import SetInfosProductStepVue from 'src/components/product/newProduct/Stepper/St
 
 
 
-const step = [
+const steps = [
     {
         component:SetGroupNameStep,
         icon:'string',
@@ -24,9 +24,14 @@ const step = [
         icon:'string',
         title:'Informacoes do produto',
     },
-
+    {
+        component:SetInfosProductStepVue,
+        icon:'string',
+        title:'Requerimentos',
+    },
 
 ]
+
 
 
 
