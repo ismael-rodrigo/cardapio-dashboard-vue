@@ -28,8 +28,10 @@
         </q-step>
         
         <template v-slot:navigation>
-          <q-stepper-navigation >
-            <q-btn  @click="nextStepper" color="primary" :label="stepCount === props.steps.length ? 'Finish' : 'Continue'" />
+          <q-stepper-navigation class="buttons" >
+            <q-btn v-show="stepCount!=0" @click="backStepper" color="warning" label="Voltar" />
+            <div v-show="stepCount>=0"></div>
+            <q-btn @click="nextStepper" color="primary" :label="stepCount === props.steps.length ? 'Finish' : 'Continue'" />
           </q-stepper-navigation>
         </template>
       </q-stepper>
@@ -63,7 +65,9 @@ const stepCount = ref(0)
 const nextStepper = ()=>{
   if(props.steps.length != stepCount.value)stepCount.value++
 }
-
+const backStepper = ()=>{
+  if(stepCount.value>0)stepCount.value--
+}
 
   
 </script>
@@ -74,6 +78,11 @@ const nextStepper = ()=>{
 
   width: 60%;
   margin: 20px auto;
+}
+
+.buttons{
+  display: flex;
+  justify-content: space-between;
 }
 
 </style>

@@ -9,7 +9,7 @@ import StepperNewProduct from 'src/components/product/newProduct/Stepper/SteperC
 
 import SetGroupNameStep from 'src/components/product/newProduct/Stepper/Steps/SetGroupNameStep.vue';
 import SetInfosProductStepVue from 'src/components/product/newProduct/Stepper/Steps/SetInfosProductStep.vue';
-
+import SetRequirementsStepVue from 'src/components/product/newProduct/Stepper/Steps/SetRequirementsStep.vue';
 
 
 const steps = [
@@ -25,7 +25,7 @@ const steps = [
         title:'Informacoes do produto',
     },
     {
-        component:SetInfosProductStepVue,
+        component:SetRequirementsStepVue,
         icon:'string',
         title:'Requerimentos',
     },

@@ -4,6 +4,7 @@ import { token } from 'app/token';
 import { ShopCarType } from 'src/models/shopOrder';
 import { Notify } from 'quasar';
 import { useAuthStore } from './auth';
+import useNotify from 'src/composables/useNotify';
 
 
 
@@ -26,7 +27,7 @@ const organizeOrders = (orders:ShopCarType[])=>{
 
 
 const auth = useAuthStore()
-
+const {successNotify} = useNotify()
 
 
 export const useOrderStore = defineStore('order', {
@@ -45,25 +46,21 @@ export const useOrderStore = defineStore('order', {
 
   actions: {
     getShopOrders() {
-      return api.get('api/shopcar',{headers: {
-        'Authorization': `Bearer ${auth?.token?.access}` 
-      }
-    }).then(({data}:{data:ShopCarType[]})=>{
-      this.shopOrders = organizeOrders(data)
-      return this.shopOrders
+      return api.get('api/shopcar')
+        .then( ({data}:{data:ShopCarType[]}) => {
+          this.shopOrders = organizeOrders(data)
+          return this.shopOrders
     })
     },
 
     setStatusOrder(nowStatus:'created'|'progress'|'conclude' , next=true ,id:string){
       const statusAvailable = ['created','progress','conclude','finalized']
+
       const newStatus = next?statusAvailable[statusAvailable.indexOf(nowStatus)+1]:statusAvailable[statusAvailable.indexOf(nowStatus)-1]
-      api.put(`/api/shopcar/${id}`,{status:newStatus},
-      {
-        headers: {
-        'Authorization': `Bearer ${auth?.token?.access}` 
-      }}).then((response)=>{
-        Notify.create({message:'Pedido atualizado!' ,timeout:300 ,color:'positive' ,icon:'done'})
-        this.shopOrders = organizeOrders(response.data)
+      api.put(`/api/shopcar/${id}`,{status:newStatus})
+        .then((response)=>{
+          successNotify('Pedido atualizado!')
+          this.shopOrders = organizeOrders(response.data)
       })
     }
 

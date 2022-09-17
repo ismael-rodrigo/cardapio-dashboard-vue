@@ -16,6 +16,7 @@
 
 <script setup>
 import { Notify} from 'quasar';
+import useNotify from 'src/composables/useNotify';
 import { ref  } from 'vue';
 import { useRouter } from 'vue-router';
 import {useAuthStore} from '../stores/auth'
@@ -23,10 +24,8 @@ import {useAuthStore} from '../stores/auth'
 const auth = useAuthStore()
 const router = useRouter()
 
+const {customNotify} = useNotify()
 
-
-
- 
 
 let username = ref('')
 let password = ref('')
@@ -34,7 +33,7 @@ let password = ref('')
 function handleSubmit(){
     auth.loginUser({username:username.value , password:password.value})
     .then((username)=>{
-        Notify.create({message:`Bem vindo ,${username}` ,color:'positive' , icon:'how_to_reg'})
+        customNotify({message:`Bem vindo ,${username}` ,color:'positive' , icon:'how_to_reg'})
         router.push('/dashboard')
     })
     .catch(()=>{

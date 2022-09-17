@@ -23,7 +23,7 @@
       class="full-width form"
     >
       <q-input class="full-width"  filled v-model="product_title" label="Nome do Produto"  />
-      <q-input class="full-width" type="textarea"  filled v-model="product_description" label="Descrição do Produto"   />
+      <q-input class="full-width" filled v-model="product_description" label="Descrição do Produto"   />
 
     </q-form>
 
