@@ -26,12 +26,20 @@
 
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { useProductType } from 'src/composables/useProduct';
+import { ref ,defineEmits ,onBeforeMount } from 'vue';
+
+const emit = defineEmits(['onUpdate-state-product'])
+
+type Props={
+    handlerProduct:useProductType
+}
+const props = defineProps<Props>()
 
 
 let newGroup = ref('')
 
-let groupSelected = ref('')
+let groupSelected = ref(props.handlerProduct.product.value.group_name)
 
 const groupsAvailable = [
     {group_name:'Pizza'},
@@ -41,6 +49,11 @@ const groupsAvailable = [
 
 const handleGroupSelected = (group_name:string)=>{
     groupSelected.value = group_name
+    emit('onUpdate-state-product',{
+        action:'setGroupName',
+        payload:group_name
+    })
+
 }
 
 

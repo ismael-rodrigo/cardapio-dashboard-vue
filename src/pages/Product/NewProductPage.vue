@@ -1,38 +1,45 @@
 <template>
-    <StepperNewProduct :steps="steps"/>
+    <StepperNewProduct :steps="steps" :handlerProduct="product"   />
 </template>
 
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import StepperNewProduct from 'src/components/product/newProduct/Stepper/SteperContainer.vue';
+
+import StepperNewProduct, { SteppType } from 'src/components/product/newProduct/Stepper/SteperContainer.vue';
 
 import SetGroupNameStep from 'src/components/product/newProduct/Stepper/Steps/SetGroupNameStep.vue';
 import SetInfosProductStepVue from 'src/components/product/newProduct/Stepper/Steps/SetInfosProductStep.vue';
 import SetRequirementsStepVue from 'src/components/product/newProduct/Stepper/Steps/SetRequirementsStep.vue';
+import useProduct from 'src/composables/useProduct';
+import { watch } from 'vue';
 
 
-const steps = [
+const product = useProduct()
+
+
+let steps = [
     {
         component:SetGroupNameStep,
-        icon:'string',
+        icon:'bookmark_added',
         title:'Defina o grupo',
     },
 
     {
         component:SetInfosProductStepVue,
-        icon:'string',
+        icon:'feed',
         title:'Informacoes do produto',
     },
     {
         component:SetRequirementsStepVue,
-        icon:'string',
+        icon:'receipt_long',
         title:'Requerimentos',
     },
 
-]
+] as SteppType[]
 
-
+watch(product,()=>{
+    console.log(product)
+})
 
 
 </script>

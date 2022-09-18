@@ -41,3 +41,27 @@ export type ProductOfShopCarType = {
     }[]
 
 }
+
+
+export type productType = {
+    group_name:string
+    product:{
+        title:string
+        description:string
+        value:number
+
+        requirements:{
+            name:string
+            length_sub_requiments:{
+                min:number
+                max:number
+            }
+            sub_requirements:{
+                name:string
+                description:string
+                value:number
+            }[]
+        }[]
+
+    }
+}

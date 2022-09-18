@@ -1,17 +1,22 @@
 <template>
     <div class="container">
-    <input id="fileInput" type="file" style="display:none" @change="fileChange" />
+    <input id="fileInput" type="file" style="display:none" @change="updateFile" />
     <q-card class="my-card" >
       
-      <q-card-section >
-        <q-img
+      <q-card-section>
+     
+          <q-img
+          onclick="document.getElementById('fileInput').click()"
           class="col"
+          style="cursor:pointer;"
           :src="imgProduct"
-        />
+          />
 
-        <q-card-actions   >
+     
+        
+        <q-card-actions>
           <q-btn flat round color="green" icon="add" type="file" id="fileInputButton" onclick="document.getElementById('fileInput').click()" />
-          <q-btn flat round color="red" icon="delete" @click="removeImage" />
+          <q-btn v-show="imgProduct != initialImgProduct" flat round color="red" icon="delete" @click="deleteFile" />
       
         </q-card-actions>
       </q-card-section>
@@ -19,7 +24,7 @@
 
       <q-form
       @submit="onSubmit"
-      @reset="onReset"
+
       class="full-width form"
     >
       <q-input class="full-width"  filled v-model="product_title" label="Nome do Produto"  />
@@ -36,27 +41,24 @@ import { ref } from 'vue';
 let product_title = ref('')
 let product_description = ref('')
 
-let imgProduct = ref('https://www.namepros.com/attachments/empty-png.89209/')
+const initialImgProduct = 'https://www.namepros.com/attachments/empty-png.89209/'
+let imgProduct = ref(initialImgProduct)
+
 
 
 const onSubmit = (evt:SubmitEvent | Event)=>{
 console.log(evt)
 }
-const onReset = () =>{
-console.log('reset')
+const deleteFile = ()=>{
+  imgProduct.value = initialImgProduct
+  //eslint-disable-next-line
+  //@ts-ignore
+  document.getElementById('fileInput').value = ''
 }
 
-const fileChange = (e:any)=>{
-  console.log(e.target.files)
-if(e.target.files){
-  imgProduct.value = 'https://static.clubedaanamariabraga.com.br/wp-content/uploads/2016/07/pizza-de-4-queijos.jpg?x41527'
-}
-}
-const removeImage = ()=>{
-  imgProduct.value = 'https://www.namepros.com/attachments/empty-png.89209/'
-}
-
-
+function updateFile(evt:any) {
+    imgProduct.value = URL.createObjectURL(evt.target.files[0])
+      }
 
 </script>
 
