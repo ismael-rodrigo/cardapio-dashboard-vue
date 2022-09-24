@@ -32,7 +32,7 @@ export const useAuthStore = defineStore('auth', {
         this.currentUser = credentials.username
         this.token = response.data
         this.isAuthenticated = true
-
+        console.log(response.data)
         LocalStorage.set('cardapio@dashboard:token',response.data)
         LocalStorage.set('cardapio@dashboard:username',credentials.username)
 

@@ -27,7 +27,7 @@
 
       class="full-width form"
     >
-      <q-input class="full-width"  filled v-model="product_title" label="Nome do Produto"  />
+      <q-input class="full-width"  filled v-model="product_title" label="Nome do Produto" />
       <q-input class="full-width" filled v-model="product_description" label="Descrição do Produto"   />
 
     </q-form>
@@ -36,19 +36,34 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref , watch , defineEmits } from 'vue';
 
 let product_title = ref('')
 let product_description = ref('')
+let image:any = null
 
 const initialImgProduct = 'https://www.namepros.com/attachments/empty-png.89209/'
+
 let imgProduct = ref(initialImgProduct)
 
+const emit = defineEmits(['onUpdate-state-product'])
 
+
+watch([product_title,product_description, imgProduct],()=>{
+  emit('onUpdate-state-product',{
+        action:'setProductInfos',
+        payload:{
+          product_title:product_title.value,
+          product_description:product_description.value,
+          image:image
+        }
+    })
+})
 
 const onSubmit = (evt:SubmitEvent | Event)=>{
 console.log(evt)
 }
+
 const deleteFile = ()=>{
   imgProduct.value = initialImgProduct
   //eslint-disable-next-line
@@ -56,9 +71,13 @@ const deleteFile = ()=>{
   document.getElementById('fileInput').value = ''
 }
 
+
 function updateFile(evt:any) {
+    image = evt.target.files[0]
     imgProduct.value = URL.createObjectURL(evt.target.files[0])
-      }
+    }
+
+
 
 </script>
 

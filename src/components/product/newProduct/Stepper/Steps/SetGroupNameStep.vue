@@ -19,8 +19,16 @@
 
         </q-list>
      </q-btn-dropdown>
-</div>
 
+     
+
+
+     
+</div>
+    <q-stepper-navigation class="buttons" >
+            <q-btn  color="warning" label="Voltar" />
+            <q-btn color="primary" label="avancar"/>
+    </q-stepper-navigation>
 
 </template>
 
@@ -51,7 +59,7 @@ const handleGroupSelected = (group_name:string)=>{
     groupSelected.value = group_name
     emit('onUpdate-state-product',{
         action:'setGroupName',
-        payload:group_name
+        payload:{group_name:group_name}
     })
 
 }
@@ -82,6 +90,10 @@ const handleGroupSelected = (group_name:string)=>{
     width: 100%;
     display: flex;
 }
-
+.buttons{
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
 
 </style>

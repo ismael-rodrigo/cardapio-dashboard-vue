@@ -1,5 +1,9 @@
 <template>
     <div class="container-stepper">
+      <q-form
+      @submit.prevent="handleSubmit"
+      class="q-gutter-md"
+    >
       <q-stepper
         v-model="stepCount"
         ref="stepper"
@@ -7,6 +11,7 @@
         animated
         
       >
+      
         <q-step
           v-for="step,index in props.steps"
           :key="index"
@@ -27,14 +32,9 @@
         <h1>Produto registrado com sucesso !</h1>
         </q-step>
         
-        <template v-slot:navigation>
-          <q-stepper-navigation class="buttons" >
-            <q-btn v-show="stepCount!=0" @click="backStepper" color="warning" label="Voltar" />
-            <div v-show="stepCount>=0"></div>
-            <q-btn @click="nextStepper" color="primary" :label="stepCount === props.steps.length ? 'Finish' : 'Continue'" />
-          </q-stepper-navigation>
-        </template>
+
       </q-stepper>
+    </q-form>
 
       
       
@@ -66,6 +66,15 @@ const stepCount = ref(0)
 const n = useNotify()
 
 
+
+const handleSubmit = (e:any )=>{
+  //eslint-disable-next-line
+  //@ts-ignore
+
+  console.log(e)
+}
+
+
 const nextStepper = ()=>{
   switch(stepCount.value){
     case 0: 
@@ -85,9 +94,10 @@ const backStepper = ()=>{
   if(stepCount.value>0)stepCount.value--
 }
 
-const handlerUpdateStateProduct = (evt:{action:string , payload:string})=>{
+const handlerUpdateStateProduct = (evt:{action:string , payload:any})=>{
   switch(evt.action){
-    case 'setGroupName': props.handlerProduct[evt.action](evt.payload) ; break;
+    case 'setGroupName': props.handlerProduct[evt.action](evt.payload.group_name) ; break;
+    case 'setProductInfos': console.log(evt.payload)
     
   }
 
