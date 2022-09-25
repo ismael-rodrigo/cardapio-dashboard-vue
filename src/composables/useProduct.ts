@@ -1,42 +1,56 @@
-import {  productType } from "src/models/shopOrder"
-import { Ref, ref } from "vue"
+import {  productInfos, productType } from "src/models/shopOrder"
+import { ref } from "vue"
 
 
 
 export type useProductType = {
-    product:Ref<productType>
-    setGroupName:(group_name:string)=>void
+    getProduct: () => productType
+    setInfosProduct: (infos:productInfos) => void
+    setGroupName: (group_name:string) => void
 } 
 
 
 const useProduct = ()=>{
 
-    const product = ref( {} as productType
-)
+    const productGroupName = ref('')
+
+    const productInfos = ref({} as productInfos)
+
+
+
     const setGroupName = (group_name:string)=>{
-        product.value.group_name = group_name
+        productGroupName.value = group_name
     }
 
 
-    const setInfoProduct = (infos:{
-        name:string,
-        description:string,
-        icon:string }) =>{
-            
-            product.value.product.title = infos.name
-            product.value.product.description = infos.description
+
+    const setInfosProduct = (infos:productInfos) =>{
+            productInfos.value = infos
     }
         
 
+    const getProduct = () => {
+        return{
+            group_name:productGroupName.value,
+            product:{
+                title:productInfos.value.title,
+                description:productInfos.value.description,
+                requirements:[],
+                value:0
+            }
+            
+        } as productType
+    }
 
 
 
 
 
     return {
-        product,
-        setGroupName
-    }
+        getProduct,
+        setGroupName,
+        setInfosProduct
+    } as useProductType
 
 
 }

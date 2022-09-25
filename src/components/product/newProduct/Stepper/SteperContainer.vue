@@ -1,9 +1,5 @@
 <template>
     <div class="container-stepper">
-      <q-form
-      @submit.prevent="handleSubmit"
-      class="q-gutter-md"
-    >
       <q-stepper
         v-model="stepCount"
         ref="stepper"
@@ -20,7 +16,7 @@
           :icon="step.icon"
           :done="stepCount > index"
         >
-        <component :is="step.component" @onUpdate-state-product="handlerUpdateStateProduct" :handlerProduct="props.handlerProduct" ></component>
+        <component :is="step.component" :handlerProduct="props.handlerProduct" @update-page="handleUpdatePage" ></component>
         </q-step>
   
         <q-step
@@ -34,9 +30,7 @@
         
 
       </q-stepper>
-    </q-form>
 
-      
       
     </div>
   </template>
@@ -47,12 +41,18 @@ import { useProductType } from 'src/composables/useProduct'
 import { ref } from 'vue'
   
 export type SteppType = {
-    component:any
-    icon:string
-    title:string
+  component:any
+  icon:string
+  title:string
 }
 
-
+export type UpdatePageEventType = {
+  page:'back'|'next'| null
+  error:{
+    message:string
+    type:string
+  } | null
+}
 
 
 type Props={
@@ -67,47 +67,29 @@ const n = useNotify()
 
 
 
-const handleSubmit = (e:any )=>{
-  //eslint-disable-next-line
-  //@ts-ignore
-
-  console.log(e)
+const handleUpdatePage = (payload:UpdatePageEventType)=>{
+  if(payload.error){
+    n.customNotify(payload.error)
+  }
+  else{
+    payload.page && nextStepper(payload.page)
+  }
 }
 
 
-const nextStepper = ()=>{
-  switch(stepCount.value){
-    case 0: 
-      props.handlerProduct.product.value.group_name
-        ?stepCount.value++
-        :n.warningtNotify('Nome do Grupo não pode ser nulo !')
+const nextStepper = (page:'next'|'back')=>{
+  switch(page){
+    case 'next': 
+      stepCount.value++
       break;
 
-    case 1:
+    case 'back':
+      stepCount.value--
+      break;
   }
-
-
-
-
-}
-const backStepper = ()=>{
-  if(stepCount.value>0)stepCount.value--
-}
-
-const handlerUpdateStateProduct = (evt:{action:string , payload:any})=>{
-  switch(evt.action){
-    case 'setGroupName': props.handlerProduct[evt.action](evt.payload.group_name) ; break;
-    case 'setProductInfos': console.log(evt.payload)
-    
-  }
-
-
-
 }
 
 
-
-  
 </script>
 
 

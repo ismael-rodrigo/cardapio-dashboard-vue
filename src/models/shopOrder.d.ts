@@ -65,3 +65,9 @@ export type productType = {
 
     }
 }
+
+export type productInfos = {
+    title:string
+    description:string
+    icon:any
+}

@@ -25,9 +25,9 @@
 
      
 </div>
-    <q-stepper-navigation class="buttons" >
-            <q-btn  color="warning" label="Voltar" />
-            <q-btn color="primary" label="avancar"/>
+    <q-stepper-navigation style="display:flex; justify-content:space-between; margin-top: 20px;" >
+            <div></div>
+            <q-btn color="primary"  label="avancar" @click="handleOnSubmit('next')" />
     </q-stepper-navigation>
 
 </template>
@@ -36,18 +36,18 @@
 <script setup lang="ts">
 import { useProductType } from 'src/composables/useProduct';
 import { ref ,defineEmits ,onBeforeMount } from 'vue';
+import { UpdatePageEventType } from '../SteperContainer.vue';
 
-const emit = defineEmits(['onUpdate-state-product'])
 
 type Props={
     handlerProduct:useProductType
 }
 const props = defineProps<Props>()
 
-
 let newGroup = ref('')
+let groupSelected = ref(props.handlerProduct.getProduct().group_name)
 
-let groupSelected = ref(props.handlerProduct.product.value.group_name)
+
 
 const groupsAvailable = [
     {group_name:'Pizza'},
@@ -57,12 +57,34 @@ const groupsAvailable = [
 
 const handleGroupSelected = (group_name:string)=>{
     groupSelected.value = group_name
-    emit('onUpdate-state-product',{
-        action:'setGroupName',
-        payload:{group_name:group_name}
-    })
-
 }
+
+
+const emit = defineEmits(['update-page'])
+
+const handleOnSubmit = (page:'next'|'back')=>{
+
+
+    if(groupSelected.value){
+        groupSelected.value
+        emit( 'update-page' ,{ page:page } as UpdatePageEventType )
+        props.handlerProduct.setGroupName(groupSelected.value);
+        
+    }
+
+    else{
+        emit('update-page',{
+            error:{
+                message:'Nome do grupo é obrigatório',
+                type:'warning'
+            }
+        } as UpdatePageEventType )
+        
+    }
+    
+}
+
+
 
 
 
@@ -90,10 +112,6 @@ const handleGroupSelected = (group_name:string)=>{
     width: 100%;
     display: flex;
 }
-.buttons{
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-between;
-}
+
 
 </style>

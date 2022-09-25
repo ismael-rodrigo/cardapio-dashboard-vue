@@ -22,21 +22,30 @@
       </q-card-section>
       </q-card>
 
-      <q-form
-      @submit="onSubmit"
 
-      class="full-width form"
-    >
       <q-input class="full-width"  filled v-model="product_title" label="Nome do Produto" />
       <q-input class="full-width" filled v-model="product_description" label="Descrição do Produto"   />
 
-    </q-form>
-
     </div>
+
+    <q-stepper-navigation style="display:flex; justify-content:space-between; margin-top: 20px;" >
+            <q-btn  color="warning" label="Voltar" @click="handleSubmit('back')" />
+            <q-btn color="primary" label="avancar" @click="handleSubmit('next')" />
+    </q-stepper-navigation>
+    
 </template>
 
 <script setup lang="ts">
-import { ref , watch , defineEmits } from 'vue';
+import { useProductType } from 'src/composables/useProduct';
+import { ref , defineEmits } from 'vue';
+import { UpdatePageEventType } from '../SteperContainer.vue';
+
+type Props={
+    handlerProduct:useProductType
+}
+const props = defineProps<Props>()
+
+
 
 let product_title = ref('')
 let product_description = ref('')
@@ -46,36 +55,48 @@ const initialImgProduct = 'https://www.namepros.com/attachments/empty-png.89209/
 
 let imgProduct = ref(initialImgProduct)
 
-const emit = defineEmits(['onUpdate-state-product'])
+const emit = defineEmits(['update-page'])
 
 
-watch([product_title,product_description, imgProduct],()=>{
-  emit('onUpdate-state-product',{
-        action:'setProductInfos',
-        payload:{
-          product_title:product_title.value,
-          product_description:product_description.value,
-          image:image
-        }
-    })
-})
+const handleSubmit = (page:'next'|'back')=>{
+  if(page == 'back'){
+        emit( 'update-page' ,{ page:page } as UpdatePageEventType )
+        return;
+    } 
 
-const onSubmit = (evt:SubmitEvent | Event)=>{
-console.log(evt)
+  if(product_title.value && product_description.value && image){
+        emit( 'update-page' ,{ page:page } as UpdatePageEventType )
+        props.handlerProduct.setInfosProduct({
+          title:product_title.value,
+          description:product_description.value,
+          icon:image
+        })
+
+    }
+
+    else{
+        emit('update-page',{
+            error:{
+                message:'Todos os campos são obrigatórios',
+                type:'warning'
+            }
+        } as UpdatePageEventType )
+    }
 }
 
 const deleteFile = ()=>{
   imgProduct.value = initialImgProduct
+  image.value = null
   //eslint-disable-next-line
   //@ts-ignore
   document.getElementById('fileInput').value = ''
 }
 
 
-function updateFile(evt:any) {
-    image = evt.target.files[0]
-    imgProduct.value = URL.createObjectURL(evt.target.files[0])
-    }
+const updateFile = (evt:any) => {
+  image = evt.target.files[0]
+  imgProduct.value = URL.createObjectURL(evt.target.files[0])
+  }
 
 
 
