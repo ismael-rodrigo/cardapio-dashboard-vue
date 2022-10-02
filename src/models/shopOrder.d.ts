@@ -42,6 +42,12 @@ export type ProductOfShopCarType = {
 
 }
 
+export type SubRequirement = {
+    name:string
+    description:string
+    value:number
+}
+
 
 export type productType = {
     group_name:string
@@ -56,11 +62,7 @@ export type productType = {
                 min:number
                 max:number
             }
-            sub_requirements:{
-                name:string
-                description:string
-                value:number
-            }[]
+            sub_requirements:SubRequirement[]
         }[]
 
     }

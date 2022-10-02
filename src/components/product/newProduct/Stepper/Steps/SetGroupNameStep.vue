@@ -63,29 +63,19 @@ const handleGroupSelected = (group_name:string)=>{
 const emit = defineEmits(['update-page'])
 
 const handleOnSubmit = (page:'next'|'back')=>{
+        const validate = props.handlerProduct.setGroupName(groupSelected.value)
 
-
-    if(groupSelected.value){
-        groupSelected.value
-        emit( 'update-page' ,{ page:page } as UpdatePageEventType )
-        props.handlerProduct.setGroupName(groupSelected.value);
-        
-    }
-
-    else{
-        emit('update-page',{
-            error:{
-                message:'Nome do grupo é obrigatório',
-                type:'warning'
-            }
-        } as UpdatePageEventType )
-        
-    }
-    
+        if(validate?.error){
+            emit('update-page',{
+            error:validate?.error
+            } as UpdatePageEventType )
+        }
+        else{
+            emit('update-page',{
+            page:page
+            } as UpdatePageEventType )
+        }
 }
-
-
-
 
 
 </script>

@@ -1,43 +1,66 @@
 <template>
+    <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="">
     <div class="container">
-    <input id="fileInput" type="file" style="display:none" @change="updateFile" />
-    <q-card class="my-card" >
       
-      <q-card-section>
-     
-          <q-img
-          onclick="document.getElementById('fileInput').click()"
-          class="col"
-          style="cursor:pointer;"
-          :src="imgProduct"
+      
+      <input id="fileInput" type="file" style="display:none" @change="updateFile" />
+      <q-card class="my-card" >
+        
+        <q-card-section>
+      
+            <q-img
+            onclick="document.getElementById('fileInput').click()"
+            class="col"
+            style="cursor:pointer;"
+            :src="imgProduct"
+            />
+
+      
+          
+          <q-card-actions>
+            <q-btn flat round color="green" icon="add" type="file" id="fileInputButton" onclick="document.getElementById('fileInput').click()" />
+            <q-btn v-show="imgProduct != initialImgProduct" flat round color="red" icon="delete" @click="deleteFile" />
+        
+          </q-card-actions>
+        </q-card-section>
+        </q-card>
+
+
+        <q-input 
+
+        class="full-width"  
+        filled 
+        v-model="product_title" 
+        label="Nome do Produto" 
+        lazy-rules
+        :rules="[ (val) => val.length>0 || 'Nome do Produto não pode ser nulo']"
+        
+        
+        
+        />
+        <q-input 
+        required
+        class="full-width" 
+        filled 
+        v-model="product_description" 
+        label="Descrição do Produto" 
+        lazy-rules
+        :rules="[ (val) => val.length>0 || 'Descrição do Produto não pode ser nulo']"
           />
 
-     
-        
-        <q-card-actions>
-          <q-btn flat round color="green" icon="add" type="file" id="fileInputButton" onclick="document.getElementById('fileInput').click()" />
-          <q-btn v-show="imgProduct != initialImgProduct" flat round color="red" icon="delete" @click="deleteFile" />
-      
-        </q-card-actions>
-      </q-card-section>
-      </q-card>
+      </div>
 
-
-      <q-input class="full-width"  filled v-model="product_title" label="Nome do Produto" />
-      <q-input class="full-width" filled v-model="product_description" label="Descrição do Produto"   />
-
-    </div>
-
-    <q-stepper-navigation style="display:flex; justify-content:space-between; margin-top: 20px;" >
-            <q-btn  color="warning" label="Voltar" @click="handleSubmit('back')" />
-            <q-btn color="primary" label="avancar" @click="handleSubmit('next')" />
-    </q-stepper-navigation>
+      <q-stepper-navigation style="display:flex; justify-content:space-between; margin-top: 20px;" >
+              <q-btn  color="warning" label="Voltar" @click="emit('update-page' ,{ page:'back' } as UpdatePageEventType )" />
+              <q-btn color="primary" label="avancar" type="submit" />
+      </q-stepper-navigation>
+    </form>
     
 </template>
 
 <script setup lang="ts">
 import { useProductType } from 'src/composables/useProduct';
-import { ref , defineEmits } from 'vue';
+import { ref , defineEmits, VNodeRef } from 'vue';
 import { UpdatePageEventType } from '../SteperContainer.vue';
 
 type Props={
@@ -47,9 +70,14 @@ const props = defineProps<Props>()
 
 
 
-let product_title = ref('')
-let product_description = ref('')
+const product_title = ref('')
+const product_description = ref('')
 let image:any = null
+
+
+
+
+
 
 const initialImgProduct = 'https://www.namepros.com/attachments/empty-png.89209/'
 
@@ -58,30 +86,11 @@ let imgProduct = ref(initialImgProduct)
 const emit = defineEmits(['update-page'])
 
 
-const handleSubmit = (page:'next'|'back')=>{
-  if(page == 'back'){
-        emit( 'update-page' ,{ page:page } as UpdatePageEventType )
-        return;
-    } 
 
-  if(product_title.value && product_description.value && image){
-        emit( 'update-page' ,{ page:page } as UpdatePageEventType )
-        props.handlerProduct.setInfosProduct({
-          title:product_title.value,
-          description:product_description.value,
-          icon:image
-        })
+const onSubmit  = (evt:Event) =>{
+  
+  console.log(evt)
 
-    }
-
-    else{
-        emit('update-page',{
-            error:{
-                message:'Todos os campos são obrigatórios',
-                type:'warning'
-            }
-        } as UpdatePageEventType )
-    }
 }
 
 const deleteFile = ()=>{
