@@ -51,7 +51,7 @@ export type UpdatePageEventType = {
   error:{
     message:string
     type:string
-  } | null
+  }[] | null
 }
 
 
@@ -68,16 +68,17 @@ const n = useNotify()
 
 
 const handleUpdatePage = (payload:UpdatePageEventType)=>{
-  if(payload.error){
-    n.customNotify(payload.error)
+  if(payload.error && payload.error.length>0){
+    payload.error.map(e => n.customNotify(e))
+    
   }
   else{
-    payload.page && nextStepper(payload.page)
+    payload.page && updateStepper(payload.page)
   }
 }
 
 
-const nextStepper = (page:'next'|'back')=>{
+const updateStepper = (page:'next'|'back')=>{
   switch(page){
     case 'next': 
       stepCount.value++

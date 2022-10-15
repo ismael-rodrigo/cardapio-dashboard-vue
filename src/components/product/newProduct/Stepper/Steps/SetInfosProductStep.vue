@@ -1,5 +1,4 @@
 <template>
-    <form @submit.prevent.stop="onSubmit" @reset.prevent.stop="">
     <div class="container">
       
       
@@ -27,35 +26,29 @@
 
 
         <q-input 
-
         class="full-width"  
         filled 
         v-model="product_title" 
         label="Nome do Produto" 
-        lazy-rules
-        :rules="[ (val) => val.length>0 || 'Nome do Produto não pode ser nulo']"
+
         
         
         
         />
         <q-input 
-        required
         class="full-width" 
         filled 
         v-model="product_description" 
         label="Descrição do Produto" 
-        lazy-rules
-        :rules="[ (val) => val.length>0 || 'Descrição do Produto não pode ser nulo']"
           />
 
       </div>
 
       <q-stepper-navigation style="display:flex; justify-content:space-between; margin-top: 20px;" >
               <q-btn  color="warning" label="Voltar" @click="emit('update-page' ,{ page:'back' } as UpdatePageEventType )" />
-              <q-btn color="primary" label="avancar" type="submit" />
+              <q-btn color="primary" label="avancar" @click="onSubmit()" />
       </q-stepper-navigation>
-    </form>
-    
+
 </template>
 
 <script setup lang="ts">
@@ -87,9 +80,24 @@ const emit = defineEmits(['update-page'])
 
 
 
-const onSubmit  = (evt:Event) =>{
+const onSubmit  = () =>{
   
-  console.log(evt)
+  const validate = props.handlerProduct.setInfosProduct({
+    icon:image,
+    description:product_description.value,
+    title:product_title.value
+  })
+
+  if(validate?.error){
+      emit('update-page',{
+      error:validate.error
+      } as UpdatePageEventType )
+  }
+  else{
+      emit('update-page',{
+      page:'next'
+      } as UpdatePageEventType )
+  }
 
 }
 

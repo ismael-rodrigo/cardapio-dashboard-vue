@@ -67,7 +67,7 @@ const handleOnSubmit = (page:'next'|'back')=>{
 
         if(validate?.error){
             emit('update-page',{
-            error:validate?.error
+            error:validate.error
             } as UpdatePageEventType )
         }
         else{

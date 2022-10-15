@@ -133,25 +133,7 @@ const handleSubmit = (page:'next'|'back')=>{
         return;
     } 
 
-    if(page=='next' &&
-    subRequirements.value.length>0 &&
-    title_requirement.value &&
-    max.value>min.value
-    ){
-        
-        emit('update-page',{
-            page:page
-        } as UpdatePageEventType )
-    }
-
-    else{
-        emit('update-page',{
-            error:{
-                message:'Todos os campos são obrigatórios',
-                type:'warning'
-            }
-        } as UpdatePageEventType )
-    }
+  
 }
 </script>
 

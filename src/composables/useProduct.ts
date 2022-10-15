@@ -1,11 +1,13 @@
 import {  productInfos, productType } from "src/models/shopOrder"
 import { ref } from "vue"
 
+type Error = {
+    message:string
+    type:'warning'|'danger'
+}
+
 type Validation = {
-    error:{
-        message:string
-        type:'warning'|'danger'
-    } | null
+    error:Error[]
 
 }
 
@@ -17,11 +19,6 @@ export type useProductType = {
 } 
 
 
-const LABELS_PRODUCT = {
-    title: 'Nome do Produto',
-    description: 'Descrição',
-    icon: 'Imagem'
-}
 
 const useProduct = ()=>{
 
@@ -39,10 +36,12 @@ const useProduct = ()=>{
         }
         else{
             return {    
-                error:{
+                error:[
+                    {
                     message:'Nome do Grupo não pode ser nulo',
                     type:'warning'
-                }
+                    }
+                ]
             } as Validation
         
         }
@@ -52,21 +51,24 @@ const useProduct = ()=>{
 
     const setInfosProduct = (infos:productInfos) =>{
 
+        const LABELS_PRODUCT = {
+            title: 'Nome do Produto',
+            description: 'Descrição',
+            icon: 'Imagem'
+        }
+
         const errors = ref([])
+
         for (const [key, value] of Object.entries(infos)) {
             if(!value){
             //eslint-disable-next-line
             //@ts-ignore
-            errors.value.push(`${LABELS_PRODUCT[key]}`);          
+            errors.value.push({message:`${LABELS_PRODUCT[key]} não pode ser nulo !` , type:'warning'})   
             }
         }
         if(errors.value.length>0){
-            return {    
-                error:{
-                    message: errors.value.length==1?`Campo ${errors.value[0]} é obrigatório.`:'Todos os campos são obrigatórios.',
-                    type:'warning'
-                }
-            } as Validation
+            return { error:errors.value }
+
         }else {
             productInfos.value = infos
         }
