@@ -2,11 +2,11 @@
 FROM node:19-alpine3.15 as develop-stage
 WORKDIR /app
 COPY package*.json ./
-RUN yarn global add @quasar/cli
+RUN npm i -g @quasar/cli
 COPY . .
 # build stage
 FROM develop-stage as build-stage
-RUN yarn
+RUN npm install
 RUN quasar build
 # production stage
 FROM nginx:1.17.5-alpine as production-stage
