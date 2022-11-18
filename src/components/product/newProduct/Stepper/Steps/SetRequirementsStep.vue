@@ -2,7 +2,7 @@
     <div class="requirements-container">
         <p class="text-h6">Defina as opções do produto</p>
         <div class="option-container ">
-            <p class="text-subtitle2 ">Opção 1 :</p>
+            <p class="text-subtitle2 ">Opção {{opc_number}} :</p>
             <div class="option">
                 <div class="requirement">
                     
@@ -77,9 +77,29 @@
     </div>
 
     <q-stepper-navigation style="display:flex; justify-content:space-between; margin-top: 20px;" >
-            <q-btn  color="warning" label="Voltar" @click="handleSubmit('back')" />
-            <q-btn color="primary" label="avancar" @click="handleSubmit('next')" />
+            <q-btn  color="warning" v-if="opc_number==1" label="Voltar" @click="handleSubmit('back')" />
+            <q-btn  color="warning" v-if="opc_number>1" label="Excluir opção" @click="remOption()" />
+            <q-btn color="primary" label="avancar" @click="()=>openAlert = true" />
     </q-stepper-navigation>
+
+
+    <q-dialog v-model="openAlert">
+        <q-card>
+          <q-card-section>
+            <div class="text-h6">Alert</div>
+          </q-card-section>
+  
+          <q-card-section class="q-pt-none">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.
+          </q-card-section>
+  
+          <q-card-actions align="right">
+            <q-btn flat label="Continuar com cadastro" color="primary" v-close-popup @click="handleSubmit('next')" />
+            <q-btn flat label="Adicionar outra opção" color="primary" v-close-popup  @click="addNewOption" />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
+
 
 </template>
 
@@ -89,14 +109,20 @@ import {SubRequirement} from 'src/models/shopOrder'
 import { ref } from 'vue';
 import { UpdatePageEventType } from '../SteperContainer.vue';
 import { useQuasar } from 'quasar';
+import useNotify from 'src/composables/useNotify';
 
 const emit = defineEmits(['update-page'])
 const $q = useQuasar()
+const n = useNotify()
+
+
 type Props={
     handlerProduct:useProductType
 }
 
 const props = defineProps<Props>()
+const openAlert = ref(false)
+const opc_number = ref(1)
 
 
 const min = ref(0)
@@ -128,23 +154,69 @@ const addNewSubRequirement = () => {
 
 
 const handleSubmit = (page:'next'|'back')=>{
-  if(page == 'back'){
+    if(page == 'back'){
         emit( 'update-page' ,{ page:page } as UpdatePageEventType )
         return;
-    } 
+    }
+    const validadtion = props.handlerProduct.setRequirements({
+        name:title_requirement.value,
+        length_sub_requiments:{min:min.value, max:max.value},
+        sub_requirements:subRequirements.value
+    })
 
-  
+    openAlert.value = true;
+    
+
 }
+
+const addNewOption = ()=>{
+    const validadtion = props.handlerProduct.setRequirements({
+        name:title_requirement.value,
+        length_sub_requiments:{min:min.value, max:max.value},
+        sub_requirements:subRequirements.value
+    })
+
+    max.value = 0;
+    min.value = 0;
+    title_requirement.value = ''
+    title_subRequirement.value =''
+    value_subRequirement.value = 0
+    description_subRequirement.value = ''
+    subRequirements.value = []
+
+    opc_number.value++
+}
+
+
+const remOption = ()=>{
+    const before_requirement = props.handlerProduct.remOption(title_requirement.value)
+    console.log(before_requirement)
+    opc_number.value--
+
+    max.value = before_requirement.length_sub_requiments.max
+    min.value = before_requirement.length_sub_requiments.min
+    title_requirement.value = before_requirement.name
+    subRequirements.value = before_requirement.sub_requirements
+
+    title_subRequirement.value =''
+    value_subRequirement.value = 0
+    description_subRequirement.value = ''
+}
+
+
+
+
+
+
+
+
 </script>
 
 
 <style scoped>
-.requirements-container {
-    
-}
 
 .option{
-    background-color: rgba(255, 255, 255, 0.247);
+    border:1px solid rgba(255, 255, 255, 0.247);
     padding: 10px 20px;
     border-radius: 5px;
 

@@ -3,7 +3,7 @@ import axios , {AxiosRequestHeaders} from 'axios'
 import { LocalStorage } from 'quasar'
 import { tokenType } from 'src/stores/auth'
 
-const api = axios.create({ baseURL: 'http://localhost:8080' })
+const api = axios.create({ baseURL: 'http://localhost:8000' })
 
 
 api.defaults.headers.common['Authorization'] = `Bearer ${LocalStorage.getItem<tokenType>('cardapio@dashboard:token')?.access}`

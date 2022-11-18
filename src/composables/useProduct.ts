@@ -1,4 +1,4 @@
-import {  productInfos, productType } from "src/models/shopOrder"
+import {  productInfos, productType ,RequirementProduct} from "src/models/shopOrder"
 import { ref } from "vue"
 
 type Error = {
@@ -15,7 +15,8 @@ export type useProductType = {
     getProduct: () => productType
     setInfosProduct: (infos:productInfos) => Validation | void
     setGroupName: (group_name:string) => Validation | void
-    setRequirements: () => void
+    setRequirements: (requirement:RequirementProduct) => Validation | void
+    remOption:(title_requirement:string)=>RequirementProduct
 } 
 
 
@@ -26,7 +27,7 @@ const useProduct = ()=>{
 
     const productInfos = ref({} as productInfos)
 
-
+    const requirements = ref([] as RequirementProduct[])
 
     const setGroupName =  (group_name:string)=>{
 
@@ -76,8 +77,8 @@ const useProduct = ()=>{
     }
 
 
-    const setRequirements = () => {
-        console.log('')
+    const setRequirements = (requirement:RequirementProduct) => {
+        requirements.value.push(requirement)
     }
         
 
@@ -87,11 +88,16 @@ const useProduct = ()=>{
             product:{
                 title:productInfos.value.title,
                 description:productInfos.value.description,
-                requirements:[],
+                requirements:requirements.value,
                 value:0
             }
             
         } as productType
+    }
+
+    const remOption = (title_requirement:string)=>{
+        requirements.value = requirements.value.filter(requirement => requirement.name != title_requirement)
+        return requirements.value[requirements.value.length - 1]
     }
 
 
@@ -102,7 +108,8 @@ const useProduct = ()=>{
         getProduct,
         setGroupName,
         setInfosProduct,
-        setRequirements
+        setRequirements,
+        remOption
     } as useProductType
 
 

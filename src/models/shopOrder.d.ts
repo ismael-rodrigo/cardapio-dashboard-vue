@@ -55,18 +55,21 @@ export type productType = {
         title:string
         description:string
         value:number
-
-        requirements:{
-            name:string
-            length_sub_requiments:{
-                min:number
-                max:number
-            }
-            sub_requirements:SubRequirement[]
-        }[]
+        requirements:RequirementProduct[]
 
     }
 }
+
+export type RequirementProduct = {
+    name:string
+    length_sub_requiments:{
+        min:number
+        max:number
+    }
+    sub_requirements:SubRequirement[]
+}
+
+
 
 export type productInfos = {
     title:string
