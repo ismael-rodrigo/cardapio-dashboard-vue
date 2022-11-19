@@ -5,14 +5,14 @@
             <p class="text-subtitle2 ">Opção {{opc_number}} :</p>
             <div class="option">
                 <div class="requirement">
-                    
+
                     <div class="title-container">
                         <p>Título da opção :</p>
-                       
+
                         <q-input outlined  style="width:100%;" label="Título"  placeholder="Ex: Sabor da pizza" v-model="title_requirement" />
-                
+
                     </div>
-                    
+
 
                     <div class="input-container">
                         <p>Limite de  opções :</p>
@@ -23,17 +23,17 @@
                     </div>
 
                 </div>
-                
+
                 <br>
                 <q-separator spaced  />
-                
-                
+
+
                 <div class="sub-container">
                     <p>Sub Opções</p>
-                    
+
                     <div class="sub-opcoes">
                         <div class="row ">
-                            <div class="col ">  
+                            <div class="col ">
                                 <q-input outlined  label="Titulo"  placeholder="Ex: 1/2 Calabresa" v-model="title_subRequirement" />
                             </div>
 
@@ -47,9 +47,9 @@
                         </div>
                         <br>
                         <div class="row">
-                            <q-btn style="width: 75%; margin: auto;" color="positive" rounded @click="addNewSubRequirement" >Adicionar</q-btn>       
+                            <q-btn style="width: 75%; margin: auto;" color="positive" rounded @click="addNewSubRequirement" >Adicionar</q-btn>
                         </div>
-                         
+
                     </div>
                     <br>
                     <div v-for="sub in subRequirements" :key="sub.name" >
@@ -61,18 +61,18 @@
                             </div>
 
                             <p class="col-md-1"  >R$ {{sub.value}}</p>
-                           
+
                         </div>
                         <br>
                     </div>
 
-                    
+
                 </div>
 
 
             </div>
         </div>
-        
+
 
     </div>
 
@@ -88,11 +88,11 @@
           <q-card-section>
             <div class="text-h6">Alert</div>
           </q-card-section>
-  
+
           <q-card-section class="q-pt-none">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.
           </q-card-section>
-  
+
           <q-card-actions align="right">
             <q-btn flat label="Continuar com cadastro" color="primary" v-close-popup @click="handleSubmit('next')" />
             <q-btn flat label="Adicionar outra opção" color="primary" v-close-popup  @click="addNewOption" />
@@ -105,8 +105,8 @@
 
 <script setup lang="ts">
 import { useProductType  } from 'src/composables/useProduct';
-import {SubRequirement} from 'src/models/shopOrder'
-import { ref } from 'vue';
+import {RequirementProduct, SubRequirement  } from 'src/models/shopOrder'
+import { ref , onMounted } from 'vue';
 import { UpdatePageEventType } from '../SteperContainer.vue';
 import { useQuasar } from 'quasar';
 import useNotify from 'src/composables/useNotify';
@@ -119,14 +119,15 @@ const n = useNotify()
 type Props={
     handlerProduct:useProductType
 }
-
 const props = defineProps<Props>()
+
+
 const openAlert = ref(false)
 const opc_number = ref(1)
 
 
 const min = ref(0)
-const max = ref(0)    
+const max = ref(0)
 const title_requirement = ref('')
 
 const title_subRequirement = ref('')
@@ -135,8 +136,30 @@ const description_subRequirement = ref('')
 
 const subRequirements = ref([] as SubRequirement[])
 
+onMounted(()=>{
+  var last_requirement:RequirementProduct
+  if(props.handlerProduct.getProduct().product.requirements.length>0){
+    last_requirement = props.handlerProduct.getProduct().product.requirements[props.handlerProduct.getProduct().product.requirements.length - 1]
+    min.value = last_requirement.length_sub_requiments.min
+    max.value = last_requirement.length_sub_requiments.max
+    title_requirement.value = last_requirement.name
+    subRequirements.value = last_requirement.sub_requirements
+    opc_number.value = props.handlerProduct.getProduct().product.requirements.length
 
-    
+
+    props.handlerProduct.remRequirements(props.handlerProduct.getProduct().product.requirements.length - 1);
+    console.log(props.handlerProduct.getProduct())
+  }
+})
+
+
+
+
+
+
+
+
+
 const addNewSubRequirement = () => {
     subRequirements.value.push({
         name:title_subRequirement.value,
@@ -156,16 +179,18 @@ const addNewSubRequirement = () => {
 const handleSubmit = (page:'next'|'back')=>{
     if(page == 'back'){
         emit( 'update-page' ,{ page:page } as UpdatePageEventType )
+        props.handlerProduct.remRequirements()
         return;
     }
-    const validadtion = props.handlerProduct.setRequirements({
+    const validation = props.handlerProduct.setRequirements({
         name:title_requirement.value,
         length_sub_requiments:{min:min.value, max:max.value},
         sub_requirements:subRequirements.value
     })
 
-    openAlert.value = true;
-    
+    emit( 'update-page' ,{ page:page } as UpdatePageEventType )
+    openAlert.value = false;
+
 
 }
 

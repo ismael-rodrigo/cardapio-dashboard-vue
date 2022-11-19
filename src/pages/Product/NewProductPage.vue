@@ -10,6 +10,9 @@ import StepperNewProduct, { SteppType } from 'src/components/product/newProduct/
 import SetGroupNameStep from 'src/components/product/newProduct/Stepper/Steps/SetGroupNameStep.vue';
 import SetInfosProductStepVue from 'src/components/product/newProduct/Stepper/Steps/SetInfosProductStep.vue';
 import SetRequirementsStepVue from 'src/components/product/newProduct/Stepper/Steps/SetRequirementsStep.vue';
+
+
+
 import useProduct from 'src/composables/useProduct';
 import { watch } from 'vue';
 
@@ -33,12 +36,13 @@ let steps = [
         component:SetRequirementsStepVue,
         icon:'receipt_long',
         title:'Requerimentos',
-    },
+    }
+
 
 ] as SteppType[]
 
-watch(product,()=>{
-    console.log(product)
+watch(product.getProduct(),() => {
+    console.log(product.getProduct())
 })
 
 

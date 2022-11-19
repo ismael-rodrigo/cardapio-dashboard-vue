@@ -5,9 +5,9 @@
         ref="stepper"
         color="primary"
         animated
-        
+
       >
-      
+
         <q-step
           v-for="step,index in props.steps"
           :key="index"
@@ -18,28 +18,31 @@
         >
         <component :is="step.component" :handlerProduct="props.handlerProduct" @update-page="handleUpdatePage" ></component>
         </q-step>
-  
+
         <q-step
           :name="props.steps.length"
           title="Produto Finalizado"
           icon="done"
-          :done="stepCount == props.steps.length"
+          :done="stepCount == props.steps.length + 1"
         >
-        <h1>Produto registrado com sucesso !</h1>
+          <component :is="FinalStepVue"  :handlerProduct="props.handlerProduct" @update-page="handleUpdatePage" />
         </q-step>
-        
+
 
       </q-stepper>
 
-      
+
     </div>
   </template>
-  
+
 <script setup lang="ts">
 import useNotify from 'src/composables/useNotify'
 import { useProductType } from 'src/composables/useProduct'
+import FinalStepVue from './Steps/FinalStep.vue'
+
+
 import { ref } from 'vue'
-  
+
 export type SteppType = {
   component:any
   icon:string
@@ -70,7 +73,7 @@ const n = useNotify()
 const handleUpdatePage = (payload:UpdatePageEventType)=>{
   if(payload.error && payload.error.length>0){
     payload.error.map(e => n.customNotify(e))
-    
+
   }
   else{
     payload.page && updateStepper(payload.page)
@@ -80,7 +83,7 @@ const handleUpdatePage = (payload:UpdatePageEventType)=>{
 
 const updateStepper = (page:'next'|'back')=>{
   switch(page){
-    case 'next': 
+    case 'next':
       stepCount.value++
       break;
 
