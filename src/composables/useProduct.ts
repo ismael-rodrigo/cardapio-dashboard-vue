@@ -1,3 +1,4 @@
+import { api } from "src/boot/api"
 import {  productInfos, productType ,RequirementProduct} from "src/models/shopOrder"
 import { ref } from "vue"
 
@@ -18,6 +19,7 @@ export type useProductType = {
     setRequirements: (requirement:RequirementProduct) => Validation | void
     remOption:(title_requirement:string)=>RequirementProduct
     remRequirements:(index:number | void)=> void
+    sendProduct: (product:productType) =>  Promise<Validation | void>
 }
 
 
@@ -47,7 +49,6 @@ const useProduct = ()=>{
 
         }
     }
-
 
 
     const setInfosProduct = (infos:productInfos) =>{
@@ -91,6 +92,10 @@ const useProduct = ()=>{
       requirements.value = []
     }
 
+    const remOption = (title_requirement:string)=>{
+      requirements.value = requirements.value.filter(requirement => requirement.name != title_requirement)
+      return requirements.value[requirements.value.length - 1]
+    }
 
     const getProduct = () => {
         return{
@@ -105,9 +110,16 @@ const useProduct = ()=>{
         } as productType
     }
 
-    const remOption = (title_requirement:string)=>{
-      requirements.value = requirements.value.filter(requirement => requirement.name != title_requirement)
-      return requirements.value[requirements.value.length - 1]
+    const sendProduct = async (product:productType) => {
+      const result = await api.post("/api/product" , product)
+      if(result.status != 201){
+        return {error:[{ message: "Erro Desconhecido !" ,type:"danger"} as Error]} as Validation
+      }
+      var formData = new FormData();
+      formData.append("icon", productInfos.value.icon);
+      // const result_save_image = await api.post(`/api/product/${result.data["group_name"]}/${result.data["_id"]}/icon` ,formData)
+      // console.log(result_save_image)
+
     }
 
 
@@ -120,7 +132,8 @@ const useProduct = ()=>{
         setInfosProduct,
         setRequirements,
         remOption,
-        remRequirements
+        remRequirements,
+        sendProduct
     } as useProductType
 
 

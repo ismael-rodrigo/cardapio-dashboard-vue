@@ -23,9 +23,9 @@
           :name="props.steps.length"
           title="Produto Finalizado"
           icon="done"
-          :done="stepCount == props.steps.length + 1"
+          :done="is_finished == true"
         >
-          <component :is="FinalStepVue"  :handlerProduct="props.handlerProduct" @update-page="handleUpdatePage" />
+          <component :is="PreviewStep"  :handlerProduct="props.handlerProduct" @update-page="handleUpdatePage" />
         </q-step>
 
 
@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import useNotify from 'src/composables/useNotify'
 import { useProductType } from 'src/composables/useProduct'
-import FinalStepVue from './Steps/FinalStep.vue'
+import PreviewStep from './Steps/PreviewStep.vue'
 
 
 import { ref } from 'vue'
@@ -68,6 +68,7 @@ const props = defineProps<Props>()
 const stepCount = ref(0)
 const n = useNotify()
 
+const is_finished = ref(false)
 
 
 const handleUpdatePage = (payload:UpdatePageEventType)=>{
@@ -81,9 +82,15 @@ const handleUpdatePage = (payload:UpdatePageEventType)=>{
 }
 
 
-const updateStepper = (page:'next'|'back')=>{
+const updateStepper = async (page:'next'|'back')=>{
   switch(page){
     case 'next':
+
+      if(stepCount.value == props.steps.length){
+        is_finished.value = true
+        props.handlerProduct.sendProduct(props.handlerProduct.getProduct())
+        break;
+      }
       stepCount.value++
       break;
 

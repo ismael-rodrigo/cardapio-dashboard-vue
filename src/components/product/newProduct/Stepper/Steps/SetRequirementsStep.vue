@@ -145,10 +145,7 @@ onMounted(()=>{
     title_requirement.value = last_requirement.name
     subRequirements.value = last_requirement.sub_requirements
     opc_number.value = props.handlerProduct.getProduct().product.requirements.length
-
-
     props.handlerProduct.remRequirements(props.handlerProduct.getProduct().product.requirements.length - 1);
-    console.log(props.handlerProduct.getProduct())
   }
 })
 
