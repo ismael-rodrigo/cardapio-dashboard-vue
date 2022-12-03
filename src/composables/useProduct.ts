@@ -58,7 +58,7 @@ const useProduct = ()=>{
             description: 'Descrição',
             icon: 'Imagem'
         }
-
+        console.log(infos.icon)
         const errors = ref([])
 
         for (const [key, value] of Object.entries(infos)) {
@@ -111,15 +111,23 @@ const useProduct = ()=>{
     }
 
     const sendProduct = async (product:productType) => {
-      const result = await api.post("/api/product" , product)
-      if(result.status != 201){
-        return {error:[{ message: "Erro Desconhecido !" ,type:"danger"} as Error]} as Validation
-      }
-      var formData = new FormData();
-      formData.append("icon", productInfos.value.icon);
-      // const result_save_image = await api.post(`/api/product/${result.data["group_name"]}/${result.data["_id"]}/icon` ,formData)
-      // console.log(result_save_image)
+        const result_only_product_infos = await api.post("/api/product/" , product)
 
+        if(result_only_product_infos.status != 200){
+            return {error:[{ message: "Não foi possivel cadastrar produto ,tente novamente." ,type:"danger"} as Error]} as Validation
+        }
+
+        const formData = new FormData();
+        formData.append("icon",productInfos.value.icon);
+        const save_image = await api.post(`/api/product/${result_only_product_infos.data["group_name"]}/${result_only_product_infos.data["_id"]}/icon`, formData, {
+            headers: {
+            'Content-Type': 'multipart/form-data'
+            }
+        })
+
+        if(save_image.status != 200){
+            return {error:[{ message: "Não foi possivel adicionar imagem, tente adicioná-la manuamente." ,type:"warning"} as Error]} as Validation
+        }
     }
 
 

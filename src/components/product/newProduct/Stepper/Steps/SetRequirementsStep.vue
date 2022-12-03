@@ -212,7 +212,6 @@ const addNewOption = ()=>{
 
 const remOption = ()=>{
     const before_requirement = props.handlerProduct.remOption(title_requirement.value)
-    console.log(before_requirement)
     opc_number.value--
 
     max.value = before_requirement.length_sub_requiments.max
@@ -238,7 +237,7 @@ const remOption = ()=>{
 <style scoped>
 
 .option{
-    border:1px solid rgba(255, 255, 255, 0.247);
+    
     padding: 10px 20px;
     border-radius: 5px;
 

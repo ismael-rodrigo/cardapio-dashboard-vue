@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia';
 import {api} from 'src/boot/api';
-import { token } from 'app/token';
 import { ShopCarType } from 'src/models/shopOrder';
-import { Notify } from 'quasar';
 import { useAuthStore } from './auth';
 import useNotify from 'src/composables/useNotify';
 

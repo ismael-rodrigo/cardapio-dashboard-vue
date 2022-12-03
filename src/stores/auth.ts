@@ -29,10 +29,10 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     loginUser(credentials:{username:string,password:string}) {
       return api.post('/auth/token' ,credentials).then((response)=>{
+        console.log(response.data)
         this.currentUser = credentials.username
         this.token = response.data
         this.isAuthenticated = true
-        console.log(response.data)
         LocalStorage.set('cardapio@dashboard:token',response.data)
         LocalStorage.set('cardapio@dashboard:username',credentials.username)
 
