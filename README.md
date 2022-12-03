@@ -7,6 +7,7 @@ Cardapio Dashboard with VueJs
 yarn
 # or
 npm install
+
 ```
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
